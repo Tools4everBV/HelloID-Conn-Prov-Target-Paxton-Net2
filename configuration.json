@@ -1,0 +1,63 @@
+[
+    {
+        "key": "UserName",
+        "type": "input",
+        "defaultValue": "",
+        "templateOptions": {
+            "label": "UserName",
+            "description": "The UserName to connect to the API",
+            "required": true
+        }
+    },
+    {
+        "key": "Password",
+        "type": "input",
+        "defaultValue": "",
+        "templateOptions": {
+            "type": "password",
+            "label": "Password",
+            "description": "The password to connect to the API",
+            "required": true
+        }
+    },
+    {
+        "key": "BaseUrl",
+        "type": "input",
+        "defaultValue": "",
+        "templateOptions": {
+            "label": "BaseUrl",
+            "description": "The URL to the API.",
+            "required": true
+        }
+    },
+    {
+        "key": "ClientId",
+        "type": "input",
+        "defaultValue": "",
+        "templateOptions": {
+            "label": "ClientId",
+            "description": "The ClientId to connect to the API",
+            "required": true
+        }
+    },
+    {
+        "key": "departmentMapping",
+        "type": "input",
+        "defaultValue": "",
+        "templateOptions": {
+            "label": "Department Mapping File",
+            "description": "An additional Mapping file to determine the department that should be assigned to the Net2 account",
+            "required": true
+        }
+    },
+    {
+        "key": "archivedDepartmentId",
+        "type": "input",
+        "defaultValue": "",
+        "templateOptions": {
+            "label": "The Id of the department [employment termination] 'Uit Dienst'",
+            "description": "This ID/department will be used to move a user to this department when they are disabled",
+            "required": true
+        }
+    }
+]
