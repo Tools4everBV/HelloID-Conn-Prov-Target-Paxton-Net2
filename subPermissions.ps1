@@ -11,7 +11,6 @@ $mapping = Import-Csv $actionContext.Configuration.departmentMapping
 
 # Set to false at start, at the end, only when no error occurs it is set to true
 $outputContext.Success = $false 
-$actionContext.DryRun = $false
 
 # Set debug logging
 switch ($($actionContext.Configuration.isDebug)) {
