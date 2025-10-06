@@ -20,6 +20,7 @@
     - [Connection settings](#connection-settings)
     - [Prerequisites](#prerequisites)
     - [Remarks](#remarks)
+    - [Net2 Version 7 Release – Q1 2026](#net2-version-7-release---q1-2026)
   - [Getting help](#getting-help)
   - [HelloID docs](#helloid-docs)
 
@@ -86,6 +87,119 @@ The following settings are required to connect to the API.
 - The disable script in the connector assigns the user to the 'uitdienst' department.
 - If the user is disabled and therefore assigned to the department 'uitdienst,' and then later gets enabled, the user is removed from the 'uitdienst' department. The correct user will then be assigned to the correct department when the update script runs.
 
+### Net2 Version 7 Release – Q1 2026
+
+> [!NOTE]
+> The following code has not been tested on a Paxton NET2 environment. 
+
+In the first quarter of 2026, Net2 version 7 will be released. This update introduces a significant new security feature: Multi-Factor Authentication (MFA).
+MFA can be enabled within the application to provide an additional layer of protection for user logins, using a one-time access code (OTP) delivered via email or an authenticator app.
+
+**For customers updating to Net2 v7 or higher:**
+**If MFA is not enabled**, there will be **no impact **on existing Web API integrations.
+**If MFA is enabled**, **existing Web API integrations** will **need to be modified**.
+
+To implement the 'MFA' within the connector:
+
+1. Make sure to replace `Get-AccessToken` in __all__ lifecycle actions with:
+```powershell
+function Get-AccessToken {
+    [CmdletBinding()]
+    param ()
+
+    try {
+        $baseUrl = $actionContext.Configuration.BaseUrl
+
+        # Stage 1: Initial login attempt with username + password
+        $initialHeaders = @{ 'Content-Type' = 'application/x-www-form-urlencoded' }
+        $initialBody = @{
+            username   = $actionContext.Configuration.UserName
+            password   = $actionContext.Configuration.Password
+            grant_type = 'password'
+            client_id  = $actionContext.Configuration.ClientId
+        }
+
+        $splatInitialRequest = @{
+            Uri         = "$baseUrl/api/v1/authorization/tokens"
+            Method      = 'POST'
+            Headers     = $initialHeaders
+            Body        = $initialBody
+            ContentType = 'application/x-www-form-urlencoded'
+            Verbose     = $false
+        }
+        $initialResponse = Invoke-RestMethod @splatInitialRequest
+
+        # If no MFA is required, return token directly
+        if ($null -ne $initialResponse.access_token) {
+            $initialResponse.access_token
+        }
+
+        # Stage 2: MFA required
+        if ($initialResponse.error -eq 'mfa_required') {
+            $challengeToken = $initialResponse.challengeToken
+            $challengeType  = $actionContext.Configuration.MfaType # e.g. "email" or "otp"
+
+            # Request MFA challenge
+            $mfaRequestBody = @{
+                challengeToken = $challengeToken
+                challengeType  = $challengeType
+            } | ConvertTo-Json
+
+            $splatMfaRequest = @{
+                Uri         = "$baseUrl/api/v1/authorization/mfa-request"
+                Method      = 'POST'
+                Headers     = @{ 'Content-Type' = 'application/json' }
+                Body        = $mfaRequestBody
+                ContentType = 'application/json'
+                Verbose     = $false
+            }
+            $mfaRequestResponse = Invoke-RestMethod @splatMfaRequest
+
+            # Submit MFA code
+            $mfaChallengeBody = @{
+                challengeToken = $challengeToken
+                code           = $actionContext.Configuration.MfaCode
+            } | ConvertTo-Json
+
+            $splatMfaChallenge = @{
+                Uri         = "$baseUrl/api/v1/authorization/mfa-challenge"
+                Method      = 'POST'
+                Headers     = @{ 'Content-Type' = 'application/json' }
+                Body        = $mfaChallengeBody
+                ContentType = 'application/json'
+                Verbose     = $false
+            }
+            $mfaChallengeResponse = Invoke-RestMethod @splatMfaChallenge
+
+            # Exchange challengeToken for final access token
+            $finalTokenBody = @{
+                challengeToken = $challengeToken
+                grant_type     = 'mfa_2fa'
+                client_id      = $actionContext.Configuration.ClientId
+            }
+
+            $splatFinalToken = @{
+                Uri         = "$baseUrl/api/v1/authorization/tokens"
+                Method      = 'POST'
+                Headers     = @{ 'Content-Type' = 'application/x-www-form-urlencoded' }
+                Body        = $finalTokenBody
+                ContentType = 'application/x-www-form-urlencoded'
+                Verbose     = $false
+            }
+            $finalTokenResponse = Invoke-RestMethod @splatFinalToken
+
+            $finalTokenResponse.access_token
+        }
+
+    }
+    catch {
+        $PSCmdlet.ThrowTerminatingError($_)
+    }
+}
+```
+2. Extend the configuration with the following parameters:
+   - `MfaType` e.g. _email_ or _otp_.
+   - `MfaCode`.
 
 ## Getting help
 
@@ -96,5 +210,6 @@ The following settings are required to connect to the API.
 ## HelloID docs
 
 The official HelloID documentation can be found at: https://docs.helloid.com/
+
 
 
