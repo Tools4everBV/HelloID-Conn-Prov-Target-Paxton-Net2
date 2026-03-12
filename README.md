@@ -62,6 +62,9 @@ To properly setup the correlation:
 
 > ℹ️ _For more information on correlation, please refer to our correlation [documentation](https://docs.helloid.com/en/provisioning/target-systems/powershell-v2-target-systems/correlation.html) pages_.
 
+#### Concurrent actions to 1
+Set the number of concurrent actions to 1. Otherwise, retrieving the accesstoken will result in a 429 error indicating there are "too many requests".
+
 ### Connection settings
 
 The following settings are required to connect to the API.
@@ -86,6 +89,7 @@ The following settings are required to connect to the API.
 - The connector is based on Net2 Pro. The main difference between Pro and Lite is that the Pro version handles multiple authorizations, whereas the Lite version only supports one authorization. While the connector can be tested on a Lite version, it may not fully integrate with HelloId. This is because you cannot enforce that only one entitlement is granted with the business rules. There is a commented-out code snippet in the grant script, which can be used for this purpose.
 - The disable script in the connector assigns the user to the 'uitdienst' department.
 - If the user is disabled and therefore assigned to the department 'uitdienst,' and then later gets enabled, the user is removed from the 'uitdienst' department. The correct user will then be assigned to the correct department when the update script runs.
+- As of version 6.8 the Security - Authorisation endpoint (/api/v1/authorization/tokens) is rate limited and will return code 429 if requests are over 2 requests per second. Because of this, the import scripts for accounts and memberships contain a Start-Sleep command at the beginning of the script in order to prevent multiple scripts to retrieve an accesstoken.
 
 ### Net2 Version 7 Release – Q1 2026
 

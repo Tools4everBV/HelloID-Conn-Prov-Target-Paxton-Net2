@@ -3,6 +3,7 @@
 # PowerShell V2
 #################################################
 
+# Wait 4 seconds before executing script in order to prevent errors on getting the accesstoken (max 2 requests per second)
 Start-Sleep -Seconds 4
 
 # Enable TLS1.2
