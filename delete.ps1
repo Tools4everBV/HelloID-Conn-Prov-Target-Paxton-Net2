@@ -64,6 +64,10 @@ function Get-AccessToken {
             ContentType = 'application/x-www-form-urlencoded'
         }
         $token = Invoke-RestMethod @splatGetTokenParams -Verbose:$false
+
+        # Wait 500 millisecons in order to prevent error 429
+        Start-Sleep -Milliseconds  500
+
         Write-Output $token.access_token
     } catch {
         $PSCmdlet.ThrowTerminatingError($_)
