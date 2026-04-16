@@ -7,8 +7,6 @@
 # Enable TLS1.2
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor [System.Net.SecurityProtocolType]::Tls12
 
-#$actionContext.DryRun = $false
-
 #region functions
 function Resolve-Paxton-Net2Error {
     [CmdletBinding()]
@@ -66,6 +64,10 @@ function Get-AccessToken {
             ContentType = 'application/x-www-form-urlencoded'
         }
         $token = Invoke-RestMethod @splatGetTokenParams -Verbose:$false
+
+        # Wait 500 millisecons in order to prevent error 429
+        Start-Sleep -Milliseconds  500
+
         Write-Output $token.access_token
     } catch {
         $PSCmdlet.ThrowTerminatingError($_)
@@ -77,9 +79,6 @@ try {
     # Verify if [aRef] has a value
     if ([string]::IsNullOrEmpty($($actionContext.References.Account))) {
         throw 'The account reference could not be found'
-    }
-    if ([string]::IsNullOrEmpty($( $actionContext.Configuration.archivedDepartmentId))) {
-        throw 'The [Terminated Employment Department Id] could not be found, please verify your configuration'
     }
     $accessToken = Get-AccessToken
     $headers = @{
@@ -112,9 +111,6 @@ try {
     # Add a message and the result of each of the validations showing what will happen during enforcement
     if ($actionContext.DryRun -eq $true) {
         Write-Verbose "[DryRun] $dryRunMessage"  -Verbose
-        if ($actionList.Contains('UpdateDepartment')) {
-            Write-Verbose "Department update will be executed during enforcement, new department will be [Terminated Employment [id = $($actionContext.Configuration.archivedDepartmentId)]]" -Verbose
-        }
     }
 
     # Process

@@ -79,7 +79,7 @@
             "Update"
           ],
           "MappingMode": "Complex",
-          "Value": "\"\\r\\n// Please enter the mapping logic to generate the lastName based on name convention.\\r\\n\\r\\nfunction generatelastName() {\\r\\n    let middleName = Person.Name.FamilyNamePrefix;\\r\\n    let lastName = Person.Name.FamilyName;\\r\\n    let middleNamePartner = Person.Name.FamilyNamePartnerPrefix;\\r\\n    let lastNamePartner = Person.Name.FamilyNamePartner;\\r\\n    let convention = Person.Name.Convention;\\r\\n    let nameFormatted = '';\\r\\n\\r\\n    // B\\t    van den Boele\\r\\n    // BP\\t    van den Boele - de Vries\\r\\n    // P\\t    de Vries\\r\\n    // PB\\t    de Vries - van den Boele\\r\\n\\r\\n    switch (convention) {\\r\\n        case \\\"B\\\":\\r\\n            if (typeof middleName !== 'undefined' && middleName) { nameFormatted = nameFormatted + ' ' + middleName }\\r\\n            nameFormatted = nameFormatted + ' ' + lastName;\\r\\n            break;\\r\\n        case \\\"BP\\\":\\r\\n            nameFormatted = '';\\r\\n            if (typeof middleName !== 'undefined' && middleName) { nameFormatted = nameFormatted + ' ' + middleName }\\r\\n            nameFormatted = nameFormatted + ' ' + lastName;\\r\\n\\r\\n            nameFormatted = nameFormatted + ' - ';\\r\\n\\r\\n            if (typeof middleNamePartner !== 'undefined' && middleNamePartner) { nameFormatted = nameFormatted + middleNamePartner + ' ' }\\r\\n            nameFormatted = nameFormatted + lastNamePartner;\\r\\n            break;\\r\\n        case \\\"P\\\":\\r\\n            nameFormatted = '';\\r\\n            if (typeof middleNamePartner !== 'undefined' && middleNamePartner) { nameFormatted = nameFormatted + ' ' + middleNamePartner }\\r\\n            nameFormatted = nameFormatted + ' ' + lastNamePartner;\\r\\n            break;\\r\\n        case \\\"PB\\\":\\r\\n            nameFormatted = '';\\r\\n            if (typeof middleNamePartner !== 'undefined' && middleNamePartner) { nameFormatted = nameFormatted + ' ' + middleNamePartner }\\r\\n            nameFormatted = nameFormatted + ' ' + lastNamePartner;\\r\\n\\r\\n            nameFormatted = nameFormatted + ' - ';\\r\\n\\r\\n            if (typeof middleName !== 'undefined' && middleName) { nameFormatted = nameFormatted + middleName + ' ' }\\r\\n            nameFormatted = nameFormatted + lastName;\\r\\n            break;\\r\\n        default:\\r\\n            nameFormatted = '';\\r\\n            if (typeof middleName !== 'undefined' && middleName) { nameFormatted = nameFormatted + ' ' + middleName }\\r\\n            nameFormatted = nameFormatted + ' ' + lastName;\\r\\n            break;\\r\\n    }\\r\\n    const lastNameFormatted = nameFormatted.trim();\\r\\n\\r\\n    return lastNameFormatted;\\r\\n}\\r\\n\\r\\ngeneratelastName();\"",
+          "Value": "\"\\r\\n// Please enter the mapping logic to generate the lastName based on name convention.\\r\\n\\r\\nfunction generatelastName() {\\r\\n    let middleName = Person.Name.FamilyNamePrefix;\\r\\n    let lastName = Person.Name.FamilyName;\\r\\n    let middleNamePartner = Person.Name.FamilyNamePartnerPrefix;\\r\\n    let lastNamePartner = Person.Name.FamilyNamePartner;\\r\\n    let convention = Person.Name.Convention;\\r\\n    let nameFormatted = '';\\r\\n\\r\\n    // B\\t    van den Boele\\r\\n    // BP\\t    van den Boele - de Vries\\r\\n    // P\\t    de Vries\\r\\n    // PB\\t    de Vries - van den Boele\\r\\n\\r\\n    switch (convention) {\\r\\n        case \\\"B\\\":\\r\\n            //if (typeof middleName !== 'undefined' && middleName) { nameFormatted = nameFormatted + ' ' + middleName }\\r\\n            nameFormatted = nameFormatted + ' ' + lastName;\\r\\n            break;\\r\\n        case \\\"BP\\\":\\r\\n            nameFormatted = '';\\r\\n            //if (typeof middleName !== 'undefined' && middleName) { nameFormatted = nameFormatted + ' ' + middleName }\\r\\n            nameFormatted = nameFormatted + ' ' + lastName;\\r\\n\\r\\n            nameFormatted = nameFormatted + ' - ';\\r\\n\\r\\n            if (typeof middleNamePartner !== 'undefined' && middleNamePartner) { nameFormatted = nameFormatted + middleNamePartner + ' ' }\\r\\n            nameFormatted = nameFormatted + lastNamePartner;\\r\\n            break;\\r\\n        case \\\"P\\\":\\r\\n            nameFormatted = '';\\r\\n            //if (typeof middleNamePartner !== 'undefined' && middleNamePartner) { nameFormatted = nameFormatted + ' ' + middleNamePartner }\\r\\n            nameFormatted = nameFormatted + ' ' + lastNamePartner;\\r\\n            break;\\r\\n        case \\\"PB\\\":\\r\\n            nameFormatted = '';\\r\\n            //if (typeof middleNamePartner !== 'undefined' && middleNamePartner) { nameFormatted = nameFormatted + ' ' + middleNamePartner }\\r\\n            nameFormatted = nameFormatted + ' ' + lastNamePartner;\\r\\n\\r\\n            nameFormatted = nameFormatted + ' - ';\\r\\n\\r\\n            if (typeof middleName !== 'undefined' && middleName) { nameFormatted = nameFormatted + middleName + ' ' }\\r\\n            nameFormatted = nameFormatted + lastName;\\r\\n            break;\\r\\n        default:\\r\\n            nameFormatted = '';\\r\\n            //if (typeof middleName !== 'undefined' && middleName) { nameFormatted = nameFormatted + ' ' + middleName }\\r\\n            nameFormatted = nameFormatted + ' ' + lastName;\\r\\n            break;\\r\\n    }\\r\\n    const lastNameFormatted = nameFormatted.trim();\\r\\n\\r\\n    return lastNameFormatted;\\r\\n}\\r\\n\\r\\ngeneratelastName();\"",
           "UsedInNotifications": false,
           "StoreInAccountData": false
         }
@@ -163,8 +163,42 @@
             "Create",
             "Update"
           ],
+          "MappingMode": "Complex",
+          "Value": "\"\\r\\n// Please enter the mapping logic to generate the lastName based on name convention.\\r\\n\\r\\nfunction generateMiddleName() {\\r\\n    let middleName = Person.Name.FamilyNamePrefix;\\r\\n    let middleNamePartner = Person.Name.FamilyNamePartnerPrefix;\\r\\n    let convention = Person.Name.Convention;\\r\\n    let nameFormatted = '';\\r\\n\\r\\n    switch (convention) {            \\r\\n        case \\\"P\\\":\\r\\n        case \\\"PB\\\":\\r\\n            nameFormatted = middleNamePartner;\\r\\n            break;\\r\\n        case \\\"B\\\":\\r\\n        case \\\"BP\\\":\\r\\n        default:\\r\\n            nameFormatted = middleName;\\r\\n            break;\\r\\n    }\\r\\n    const middleNameFormatted = nameFormatted;\\r\\n\\r\\n    return middleNameFormatted;\\r\\n}\\r\\n\\r\\ngenerateMiddleName();\"",
+          "UsedInNotifications": false,
+          "StoreInAccountData": false
+        }
+      ]
+    },
+    {
+      "Name": "Title.Id",
+      "Description": "",
+      "Type": "Text",
+      "MappingActions": [
+        {
+          "MapForActions": [
+            "Create",
+            "Update"
+          ],
+          "MappingMode": "Fixed",
+          "Value": "\"14\"",
+          "UsedInNotifications": false,
+          "StoreInAccountData": false
+        }
+      ]
+    },
+    {
+      "Name": "Title.Value",
+      "Description": "",
+      "Type": "Text",
+      "MappingActions": [
+        {
+          "MapForActions": [
+            "Create",
+            "Update"
+          ],
           "MappingMode": "Field",
-          "Value": "\"Person.Name.FamilyNamePrefix\"",
+          "Value": "\"Person.PrimaryContract.Title.Name\"",
           "UsedInNotifications": false,
           "StoreInAccountData": false
         }
